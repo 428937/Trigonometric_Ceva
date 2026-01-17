@@ -1,4 +1,4 @@
-# TrigCeva
+# Trigonometric Ceva
 
 In triangle ABC, three Cevians AD, BE, and CF are concurrent if and only if the following identity holds:
 
