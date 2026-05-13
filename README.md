@@ -88,7 +88,9 @@ You can also import and use the equation function directly in your own scripts.
 
 The solver finds the root of the function:
 
-f(x) = sin(a₁).sin(a₂).sin(x)-sin(b₁).sin(b₂).sin(b₃ -x)
+```
+f(x) = sin(a₁) · sin(a₂) · sin(x) - sin(b₁) · sin(b₂) · sin(b₃ - x)
+```
 
 It uses numerical root-finding to locate the value(s) of `x` that satisfy the trigonometric Ceva condition.
 
