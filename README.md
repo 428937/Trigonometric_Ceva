@@ -6,15 +6,15 @@ In triangle ABC, three Cevians AD, BE, and CF are concurrent if and only if the 
 
 This is known as **Ceva's Theorem**. The theorem also has a lesser-known **trigonometric form**:
 
-\[
+$\[
 \frac{\sin \angle BAE}{\sin \angle CAD} \cdot \frac{\sin \angle CBF}{\sin \angle ABD} \cdot \frac{\sin \angle ACD}{\sin \angle BCE} = 1
-\]
+\]$
 
 or equivalently
 
-\[
+$\[
 \sin(\angle ABE) \cdot \sin(\angle BCF) \cdot \sin(\angle CAD) = \sin(\angle CBE) \cdot \sin(\angle ACF) \cdot \sin(\angle BAD)
-\]
+\]$
 
 ---
 
@@ -76,7 +76,7 @@ Enter the values when prompted and the program will output the solution for `x`.
 **Sample Output:**
 ```
 Solution found!
-x ≈ 37.45 degrees
+x = 70.000 degrees 
 ```
 
 ## Project Structure
