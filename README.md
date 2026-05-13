@@ -69,7 +69,7 @@ The program will prompt you to enter five angles (in degrees). A typical trigono
 sin(10°) · sin(26°) · sin(x) = sin(22°) · sin(24°) · sin(98° - x)
 ```
 
-Enter the values when prompted and the program will output the solution for `x`.
+Enter the values when prompted and the program will output the solution for x.
 
 **Sample Output:**
 ```
@@ -95,7 +95,7 @@ The solver finds the root of the function:
 f(x) = sin(a₁) · sin(a₂) · sin(x) - sin(b₁) · sin(b₂) · sin(b₃ - x)
 ```
 
-It uses numerical root-finding to locate the value(s) of `x` that satisfy the trigonometric Ceva condition.
+It uses numerical root-finding to locate the value(s) of x that satisfy the trigonometric Ceva condition.
 
 ## Resources & Further Reading
 
