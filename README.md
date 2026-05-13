@@ -18,7 +18,7 @@ sin(鈭燗BE) 路 sin(鈭燘CF) 路 sin(鈭燙AD) = sin(鈭燙BE) 路 sin(鈭燗CF) 路 sin(鈭
 
 ## About
 
-**Trigonometric Ceva** is a Python implementation that solves for the unknown angle in the trigonometric form of Ceva's Theorem. It helps determine the angle required for the concurrency of three cevians in a triangle using numerical methods.
+**"Trigonometric_Ceva"** is a Python implementation that solves for the unknown angle in the trigonometric form of Ceva's Theorem. It helps determine the angle required for the concurrency of three cevians in a triangle using numerical methods.
 
 ## Features
 
