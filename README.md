@@ -73,7 +73,6 @@ Enter the values when prompted and the program will output the solution for `x`.
 
 **Sample Output:**
 ```
-Solution found!
 x = 70.000 degrees 
 ```
 
