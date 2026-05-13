@@ -7,7 +7,9 @@ In triangle ABC, three Cevians AD, BE, and CF are concurrent if and only if the 
 This known as Ceva's Theorem. The theorem also has a lesser-known trigonometric form:
 
 ```
-(sin(∠ABE) / sin(∠CBE)) · (sin(∠BCF) / sin(∠ACF)) · (sin(∠CAD) / sin(∠BAD)) = 1
+\[
+\sin(\angle ABE) \cdot \sin(\angle BCF) \cdot \sin(\angle CAD) = \sin(\angle CBE) \cdot \sin(\angle ACF) \cdot \sin(\angle BAD)
+\]
 ```
 
 or equivalently
