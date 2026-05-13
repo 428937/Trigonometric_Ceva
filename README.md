@@ -83,6 +83,8 @@ Trigonometric_Ceva/
 ├── Main.py          # Main script with user interface and solver
 ├── README.md        # This file
 └── LICENSE
+└── .gitignore
+└── requirements.txt
 ```
 
 You can also import and use the equation function directly in your own scripts.
