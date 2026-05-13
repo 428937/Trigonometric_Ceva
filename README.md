@@ -2,15 +2,19 @@
 
 In triangle ABC, three Cevians AD, BE, and CF are concurrent if and only if the following identity holds:
 
-(AF / FB) * (BD / DC) * (CE / EA) = 1
+(AF / FB) · (BD / DC) · (CE / EA) = 1
 
 This known as Ceva's Theorem. The theorem also has a lesser-known trigonometric form:
 
-(sin(∠ABE) / sin(∠CBE)) * (sin(∠BCF) / sin(∠ACF)) * (sin(∠CAD) / sin(∠BAD)) = 1
+```
+(sin(∠ABE) / sin(∠CBE)) · (sin(∠BCF) / sin(∠ACF)) · (sin(∠CAD) / sin(∠BAD)) = 1
+```
 
 or equivalently
 
-sin(∠ABE) * sin(∠BCF) * sin(∠CAD) = sin(∠CBE) * sin(∠ACF) * sin(∠BAD).
+```
+sin(∠ABE) · sin(∠BCF) · sin(∠CAD) = sin(∠CBE) · sin(∠ACF) · sin(∠BAD)
+```
 
 ## About
 
