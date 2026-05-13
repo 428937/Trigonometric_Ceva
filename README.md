@@ -23,7 +23,7 @@ sin(∠ABE) * sin(∠BCF) * sin(∠CAD) = sin(∠CBE) * sin(∠ACF) * sin(∠BAD
 - Input and output in degrees
 - Clean and readable code, easy to modify or integrate into other projects
 - Handles the common case where the equation is of the form:  
-  $\sin(a_1) \cdot \sin(a_2) \cdot \sin(x) = \sin(b_1) \cdot \sin(b_2) \cdot \sin(b_3 - x)$
+  sin(a₁) * sin(a₂) * sin(x) = sin(b₁)* sin(b₂) * sin(b₃ - x)$
 
 ## Requirements
 
