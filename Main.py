@@ -29,7 +29,7 @@ b1 = float(input("4th angle (degrees): "))
 b2 = float(input("5th angle (degrees): "))
 b3 = float(input("6th angle (degrees): "))
 
-x_initial_guess = 37
+x_initial_guess = b3 / 2
 
 x_solution = fsolve(equation, x_initial_guess, args=(a1, a2, b1, b2, b3))
 
