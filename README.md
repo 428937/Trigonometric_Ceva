@@ -82,8 +82,8 @@ x = 70.000 degrees
 Trigonometric_Ceva/
 ├── Main.py          # Main script with user interface and solver
 ├── README.md        # This file
-└── LICENSE
-└── .gitignore
+├── LICENSE
+├── .gitignore
 └── requirements.txt
 ```
 
