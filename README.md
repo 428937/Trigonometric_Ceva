@@ -23,7 +23,7 @@ sin(∠ABE) * sin(∠BCF) * sin(∠CAD) = sin(∠CBE) * sin(∠ACF) * sin(∠BAD
 - Input and output in degrees
 - Clean and readable code, easy to modify or integrate into other projects
 - Handles the common case where the equation is of the form:  
-  sin(a₁) * sin(a₂) * sin(x) = sin(b₁)* sin(b₂) * sin(b₃ - x)$
+  sin(a₁) * sin(a₂) * sin(x) = sin(b₁) * sin(b₂) * sin(b₃ - x)
 
 ## Requirements
 
@@ -88,9 +88,7 @@ You can also import and use the equation function directly in your own scripts.
 
 The solver finds the root of the function:
 
-$$
-f(x) = \sin(a_1)\sin(a_2)\sin(x) - \sin(b_1)\sin(b_2)\sin(b_3 - x)
-$$
+f(x) = sin(a₁)sin(a₂)sin(x)-sin(b₁)sin(b₂)sin(b₃ -x)
 
 It uses numerical root-finding to locate the value(s) of `x` that satisfy the trigonometric Ceva condition.
 
