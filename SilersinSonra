@@ -1,0 +1,452 @@
+package emlak;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.Comparator;
+
+public class EmlakUygulamasi extends JFrame {
+    private BagliListe<Emlak> emlakListesi = new BagliListe<>();
+    private Yigin<Emlak> silinenlerYigini = new Yigin<>();
+    private Kuyruk<Emlak> talepKuyrugu = new Kuyruk<>();
+    private IkiliAramaAgaci<Emlak> fiyatAgaci = new IkiliAramaAgaci<>();
+    private DefaultTableModel tabloModeli;
+    private JTable tablo;
+    private JTextField txtBaslik, txtKonum, txtFiyat, txtMetrekare, txtOda, txtArama;
+    private int sonId = 0;
+
+    public EmlakUygulamasi() {
+        setTitle("Emlak Listeleme Uygulaması");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        // Tablo oluşturma
+        tabloModeli = new DefaultTableModel(new String[]{"ID", "Başlık", "Fiyat", "m²", "Oda", "Konum"}, 0);
+        tablo = new JTable(tabloModeli);
+        add(new JScrollPane(tablo), BorderLayout.CENTER);
+
+        // Tablo seçim dinleyicisi - Seçili satırın bilgilerini forma aktar
+        tablo.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int seciliSatir = tablo.getSelectedRow();
+                if (seciliSatir != -1) {
+                    txtBaslik.setText(tabloModeli.getValueAt(seciliSatir, 1).toString());
+                    txtKonum.setText(tabloModeli.getValueAt(seciliSatir, 5).toString());
+                    txtFiyat.setText(tabloModeli.getValueAt(seciliSatir, 2).toString());
+                    txtMetrekare.setText(tabloModeli.getValueAt(seciliSatir, 3).toString());
+                    txtOda.setText(tabloModeli.getValueAt(seciliSatir, 4).toString());
+                }
+            }
+        });
+
+        // Form paneli
+        JPanel formPanel = new JPanel(new GridLayout(2, 6));
+        formPanel.add(new JLabel("Başlık:"));
+        txtBaslik = new JTextField();
+        formPanel.add(new JLabel("Konum:"));
+        txtKonum = new JTextField();
+        formPanel.add(new JLabel("Fiyat:"));
+        txtFiyat = new JTextField();
+        formPanel.add(new JLabel("m²:"));
+        txtMetrekare = new JTextField();
+        formPanel.add(new JLabel("Oda:"));
+        txtOda = new JTextField();
+        formPanel.add(new JLabel("Arama (ID):"));
+        txtArama = new JTextField();
+
+        formPanel.add(txtBaslik);
+        formPanel.add(txtKonum);
+        formPanel.add(txtFiyat);
+        formPanel.add(txtMetrekare);
+        formPanel.add(txtOda);
+        formPanel.add(txtArama);
+        add(formPanel, BorderLayout.NORTH);
+
+        // Buton paneli
+        JPanel butonPanel = new JPanel(new GridLayout(3, 5));
+        String[] butonlar = {
+                "Ekle", "Sil", "Güncelle", "Geri Al (Yığın)", "Ziyaret Talebi Ekle (Kuyruk)",
+                "Talebi İşle", "Doğrusal Arama", "İkili Arama (ID)", "Fiyata Göre Sırala",
+                "m² Göre Sırala", "Oda Sayısına Göre Sırala", "BST Sıralı Göster",
+                "Listeyi Yenile", "Temizle", "Çıkış"
+        };
+
+        for (String isim : butonlar) {
+            JButton btn = new JButton(isim);
+            btn.addActionListener(this::butonTiklandi);
+            butonPanel.add(btn);
+        }
+        add(butonPanel, BorderLayout.SOUTH);
+
+        setSize(1050, 650);
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private void butonTiklandi(ActionEvent e) {
+        String komut = ((JButton) e.getSource()).getText();
+        try {
+            switch (komut) {
+                case "Ekle" -> emlakEkle();
+                case "Sil" -> emlakSil();
+                case "Güncelle" -> emlakGuncelle();
+                case "Geri Al (Yığın)" -> geriAl();
+                case "Ziyaret Talebi Ekle (Kuyruk)" -> talebeEkle();
+                case "Talebi İşle" -> talebiIsle();
+                case "Doğrusal Arama" -> dogrusalArama();
+                case "İkili Arama (ID)" -> ikiliArama();
+                case "Fiyata Göre Sırala" -> sirala("fiyat");
+                case "m² Göre Sırala" -> sirala("metrekare");
+                case "Oda Sayısına Göre Sırala" -> sirala("oda");
+                case "BST Sıralı Göster" -> bstSiraliGoster();
+                case "Listeyi Yenile" -> tabloyuGuncelle();
+                case "Temizle" -> temizleForm();
+                case "Çıkış" -> System.exit(0);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Hata: " + ex.getMessage(), "Hata", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void emlakEkle() {
+        if (txtBaslik.getText().trim().isEmpty() || txtFiyat.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Başlık ve Fiyat alanları zorunludur!");
+            return;
+        }
+        try {
+            String baslik = txtBaslik.getText().trim();
+            String konum = txtKonum.getText().trim();
+            double fiyat = Double.parseDouble(txtFiyat.getText().trim());
+
+            String m2Str = txtMetrekare.getText().trim();
+            int m2 = m2Str.isEmpty() ? 0 : Integer.parseInt(m2Str);
+
+            String odaStr = txtOda.getText().trim();
+            int oda = odaStr.isEmpty() ? 0 : Integer.parseInt(odaStr);
+
+            Emlak yeni = new Emlak(++sonId, baslik, konum, fiyat, m2, oda);
+            emlakListesi.sonaEkle(yeni);
+            fiyatAgaci.ekle(yeni);
+            tabloyuGuncelle();
+            temizleForm();
+            JOptionPane.showMessageDialog(this, "Emlak başarıyla eklendi: " + baslik);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Fiyat, m² ve Oda sayısı sayısal değer olmalıdır!");
+        }
+    }
+
+    private void emlakSil() {
+        int seciliSatir = tablo.getSelectedRow();
+        if (seciliSatir == -1) {
+            JOptionPane.showMessageDialog(this, "Silmek için bir emlak seçin.");
+            return;
+        }
+
+        int id = (int) tabloModeli.getValueAt(seciliSatir, 0);
+        Emlak silinecek = null;
+
+        Dugum<Emlak> gec = emlakListesi.basDugum();
+        while (gec != null) {
+            if (gec.veri.id == id) {
+                silinecek = gec.veri;
+                break;
+            }
+            gec = gec.sonraki;
+        }
+
+        if (silinecek != null && emlakListesi.veriSil(silinecek)) {
+            silinenlerYigini.ekle(silinecek);
+            rebuildBST();
+            tabloyuGuncelle();
+            JOptionPane.showMessageDialog(this, "Emlak silindi.");
+        }
+    }
+
+    private void emlakGuncelle() {
+        int seciliSatir = tablo.getSelectedRow();
+        if (seciliSatir == -1) {
+            JOptionPane.showMessageDialog(this, "Güncellemek için bir emlak seçin.");
+            return;
+        }
+
+        if (txtBaslik.getText().trim().isEmpty() || txtFiyat.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Başlık ve Fiyat alanları zorunludur!");
+            return;
+        }
+
+        try {
+            int id = (int) tabloModeli.getValueAt(seciliSatir, 0);
+
+            String yeniBaslik = txtBaslik.getText().trim();
+            String yeniKonum = txtKonum.getText().trim();
+            double yeniFiyat = Double.parseDouble(txtFiyat.getText().trim());
+            int yeniM2 = Integer.parseInt(txtMetrekare.getText().trim());
+            int yeniOda = Integer.parseInt(txtOda.getText().trim());
+
+            // Listedeki emlağı bul ve güncelle
+            Dugum<Emlak> gec = emlakListesi.basDugum();
+            boolean bulundu = false;
+
+            while (gec != null) {
+                if (gec.veri.id == id) {
+                    gec.veri.baslik = yeniBaslik;
+                    gec.veri.konum = yeniKonum;
+                    gec.veri.fiyat = yeniFiyat;
+                    gec.veri.metrekare = yeniM2;
+                    gec.veri.odaSayisi = yeniOda;
+                    bulundu = true;
+                    break;
+                }
+                gec = gec.sonraki;
+            }
+
+            if (!bulundu) {
+                JOptionPane.showMessageDialog(this, "Güncellenecek emlak bulunamadı!");
+                return;
+            }
+
+            // BST'yi sıfırdan yeniden oluştur
+            fiyatAgaci.temizle();
+            gec = emlakListesi.basDugum();
+            while (gec != null) {
+                fiyatAgaci.ekle(gec.veri);
+                gec = gec.sonraki;
+            }
+
+            // Tabloyu güncelle
+            tabloyuGuncelle();
+
+            // Güncellenen satırı tekrar seç
+            for (int i = 0; i < tabloModeli.getRowCount(); i++) {
+                if ((int) tabloModeli.getValueAt(i, 0) == id) {
+                    tablo.setRowSelectionInterval(i, i);
+                    break;
+                }
+            }
+
+            JOptionPane.showMessageDialog(this, "Emlak başarıyla güncellendi: " + yeniBaslik);
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Fiyat, m² ve Oda sayısı sayısal değer olmalıdır!");
+        }
+    }
+
+    private void geriAl() {
+        if (silinenlerYigini.bosMu()) {
+            JOptionPane.showMessageDialog(this, "Geri alınacak emlak yok.");
+            return;
+        }
+        Emlak geri = silinenlerYigini.cikar();
+        emlakListesi.sonaEkle(geri);
+        fiyatAgaci.ekle(geri);
+        tabloyuGuncelle();
+        JOptionPane.showMessageDialog(this, "Emlak geri alındı: " + geri.baslik);
+    }
+
+    private void rebuildBST() {
+        fiyatAgaci.temizle();
+        Dugum<Emlak> gec = emlakListesi.basDugum();
+        while (gec != null) {
+            fiyatAgaci.ekle(gec.veri);
+            gec = gec.sonraki;
+        }
+    }
+
+    private void talebeEkle() {
+        int seciliSatir = tablo.getSelectedRow();
+        if (seciliSatir == -1) {
+            JOptionPane.showMessageDialog(this, "Bir emlak seçin.");
+            return;
+        }
+        int id = (int) tabloModeli.getValueAt(seciliSatir, 0);
+
+        Dugum<Emlak> gec = emlakListesi.basDugum();
+        while (gec != null) {
+            if (gec.veri.id == id) {
+                talepKuyrugu.ekle(gec.veri);
+                JOptionPane.showMessageDialog(this, "Ziyaret talebi kuyruğa eklendi.");
+                return;
+            }
+            gec = gec.sonraki;
+        }
+    }
+
+    private void talebiIsle() {
+        if (talepKuyrugu.bosMu()) {
+            JOptionPane.showMessageDialog(this, "İşlenecek talep yok.");
+            return;
+        }
+        Emlak islenen = talepKuyrugu.cikar();
+        JOptionPane.showMessageDialog(this, "İşlenen talep: " + islenen.baslik);
+    }
+
+    private void dogrusalArama() {
+        String aranan = JOptionPane.showInputDialog(this, "Aranacak kelime (başlık/konum):");
+        if (aranan == null || aranan.trim().isEmpty()) return;
+
+        aranan = aranan.trim().toLowerCase();
+        DefaultTableModel sonucModel = new DefaultTableModel(new String[]{"ID", "Başlık", "Fiyat", "m²", "Oda", "Konum"}, 0);
+
+        Dugum<Emlak> gec = emlakListesi.basDugum();
+        while (gec != null) {
+            if (gec.veri.baslik.toLowerCase().contains(aranan) || gec.veri.konum.toLowerCase().contains(aranan)) {
+                sonucModel.addRow(new Object[]{gec.veri.id, gec.veri.baslik, gec.veri.fiyat,
+                        gec.veri.metrekare, gec.veri.odaSayisi, gec.veri.konum});
+            }
+            gec = gec.sonraki;
+        }
+
+        if (sonucModel.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Sonuç bulunamadı.");
+        } else {
+            JTable sonucTablo = new JTable(sonucModel);
+            JOptionPane.showMessageDialog(this, new JScrollPane(sonucTablo), "Doğrusal Arama Sonuçları", JOptionPane.PLAIN_MESSAGE);
+        }
+    }
+
+    private void ikiliArama() {
+        String idStr = txtArama.getText().trim();
+        if (idStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Arama kutusuna ID girin.");
+            return;
+        }
+
+        try {
+            int arananId = Integer.parseInt(idStr);
+            Emlak[] dizi = new Emlak[emlakListesi.boyut()];
+            Dugum<Emlak> gec = emlakListesi.basDugum();
+            int idx = 0;
+            while (gec != null) {
+                dizi[idx++] = gec.veri;
+                gec = gec.sonraki;
+            }
+
+            if (dizi.length == 0) {
+                JOptionPane.showMessageDialog(this, "Listede emlak yok.");
+                return;
+            }
+
+            hizliSiralama(dizi, 0, dizi.length - 1, Comparator.comparingInt(e -> e.id));
+            int sonuc = binarySearch(dizi, arananId);
+
+            if (sonuc == -1) {
+                JOptionPane.showMessageDialog(this, "ID bulunamadı.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Bulunan: " + dizi[sonuc].toString());
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Geçerli bir ID girin.");
+        }
+    }
+
+    private void hizliSiralama(Emlak[] dizi, int sol, int sag, Comparator<Emlak> karsilastirici) {
+        if (sol < sag) {
+            int pivotIdx = parcala(dizi, sol, sag, karsilastirici);
+            hizliSiralama(dizi, sol, pivotIdx - 1, karsilastirici);
+            hizliSiralama(dizi, pivotIdx + 1, sag, karsilastirici);
+        }
+    }
+
+    private int parcala(Emlak[] dizi, int sol, int sag, Comparator<Emlak> karsilastirici) {
+        Emlak pivot = dizi[sag];
+        int i = sol - 1;
+        for (int j = sol; j < sag; j++) {
+            if (karsilastirici.compare(dizi[j], pivot) < 0) {
+                i++;
+                Emlak gecici = dizi[i];
+                dizi[i] = dizi[j];
+                dizi[j] = gecici;
+            }
+        }
+        Emlak gecici = dizi[i + 1];
+        dizi[i + 1] = dizi[sag];
+        dizi[sag] = gecici;
+        return i + 1;
+    }
+
+    private int binarySearch(Emlak[] dizi, int arananId) {
+        int sol = 0, sag = dizi.length - 1;
+        while (sol <= sag) {
+            int orta = sol + (sag - sol) / 2;
+            if (dizi[orta].id == arananId) return orta;
+            else if (dizi[orta].id < arananId) sol = orta + 1;
+            else sag = orta - 1;
+        }
+        return -1;
+    }
+
+    private void sirala(String kriter) {
+        if (emlakListesi.boyut() == 0) {
+            JOptionPane.showMessageDialog(this, "Sıralanacak emlak yok!");
+            return;
+        }
+
+        Emlak[] dizi = new Emlak[emlakListesi.boyut()];
+        Dugum<Emlak> gec = emlakListesi.basDugum();
+        int i = 0;
+        while (gec != null) {
+            dizi[i++] = gec.veri;
+            gec = gec.sonraki;
+        }
+
+        Comparator<Emlak> karsilastirici = switch (kriter) {
+            case "fiyat" -> Comparator.comparingDouble(e -> e.fiyat);
+            case "metrekare" -> Comparator.comparingInt(e -> e.metrekare);
+            case "oda" -> Comparator.comparingInt(e -> e.odaSayisi);
+            default -> Comparator.comparingInt(e -> e.id);
+        };
+
+        hizliSiralama(dizi, 0, dizi.length - 1, karsilastirici);
+        emlakListesi.dizidenYukle(dizi);
+
+        // BST'yi de sıralı olarak yeniden oluştur
+        fiyatAgaci.temizle();
+        gec = emlakListesi.basDugum();
+        while (gec != null) {
+            fiyatAgaci.ekle(gec.veri);
+            gec = gec.sonraki;
+        }
+
+        tabloyuGuncelle();
+    }
+
+    private void bstSiraliGoster() {
+        if (emlakListesi.boyut() == 0) {
+            JOptionPane.showMessageDialog(this, "Listede emlak yok.");
+            return;
+        }
+
+        DefaultTableModel bstModel = new DefaultTableModel(new String[]{"ID", "Başlık", "Fiyat", "m²", "Oda", "Konum"}, 0);
+        fiyatAgaci.siraliGezinti(emlak ->
+                bstModel.addRow(new Object[]{emlak.id, emlak.baslik, emlak.fiyat, emlak.metrekare, emlak.odaSayisi, emlak.konum})
+        );
+
+        JTable bstTablo = new JTable(bstModel);
+        JOptionPane.showMessageDialog(this, new JScrollPane(bstTablo), "BST Sıralı (Fiyata göre)", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void tabloyuGuncelle() {
+        tabloModeli.setRowCount(0);
+        Dugum<Emlak> gec = emlakListesi.basDugum();
+        while (gec != null) {
+            Emlak e = gec.veri;
+            tabloModeli.addRow(new Object[]{e.id, e.baslik, e.fiyat, e.metrekare, e.odaSayisi, e.konum});
+            gec = gec.sonraki;
+        }
+    }
+
+    private void temizleForm() {
+        txtBaslik.setText("");
+        txtKonum.setText("");
+        txtFiyat.setText("");
+        txtMetrekare.setText("");
+        txtOda.setText("");
+        txtArama.setText("");
+        tablo.clearSelection();
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(EmlakUygulamasi::new);
+    }
+}
