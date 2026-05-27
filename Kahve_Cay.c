@@ -103,12 +103,12 @@ int main() {
                                     }  
                                     if(!toplam_farklı) continue;
 
-                                    // Yeni eklenen kısıtlar
-                                    if (kç1 != eç1) continue;                // Tek şekerli çay içen kadın ve erkek sayıları eşit
-                                    if (kç0 != eç2 - 2) continue;           // Şekersiz çay içen kadın = 2 şekerli çay içen erkek - 2
-                                    if (2 * kç0 != ek2) continue;           // Şekersiz çay içen kadın = (2 şekerli kahve içen erkek) / 2
-                                    if (kk0 != ek1) continue;               // Şekersiz kahve içen kadın = 1 şekerli kahve içen erkek
-                                    // ---------------------------------------
+                                   
+                                    if (kç1 != eç1) continue;                
+                                    if (kç0 != eç2 - 2) continue;           
+                                    if (2 * kç0 != ek2) continue;           
+                                    if (kk0 != ek1) continue;               
+                                    
 
                                     toplam_durum++;  
 
