@@ -1,19 +1,7 @@
 import numpy as np
 from scipy.optimize import fsolve
 
-'''In triangle ABC, three Cevians AD, BE, and CF are concurrent if and only if the following identity holds:
-
-    (AF / FB) * (BD / DC) * (CE / EA) = 1.
-
-The theorem also has a lesser-known trigonometric form:
-
-    (sin(∠ABE) / sin(∠CBE)) * (sin(∠BCF) / sin(∠ACF)) *  (sin(∠CAD) / sin(∠BAD)) = 1,
-
-or equivalently,
-
-    sin(∠ABE) * sin(∠BCF) * sin(∠CAD) = sin(∠CBE) * sin(∠ACF) * sin(∠BAD).
-
-This code solves for an unknown angle in the trigonometric Ceva equation.
+'''This code solves for an unknown angle in the trigonometric Ceva equation.
 ''' 
 
 def equation(x, a1, a2, b1, b2, b3):
