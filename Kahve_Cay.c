@@ -15,17 +15,13 @@ int main() {
         for(int j = 0; j < asal_sayı_adedi; j++) {  
             if(asal_sayılar[j] == erkek) {  
                 erkek_asal = 1;   
-                break;  
-            }  
-        }  
+                break;}}  
         if(!erkek_asal || !(erkek > kadın && erkek <= 2 * kadın)) continue;  
-
         int kadın_hiç = (kadın - 20) / 3;  
         if((kadın - 20) % 3 != 0 || kadın_hiç < 0) continue;  
 
         int erkek_hiç = 10 - kadın_hiç;  
         if(erkek_hiç < 0) continue;  
-
         int kadın_çay = kadın_hiç + 10;  
         int kadın_kahve = kadın_çay;  
         int erkek_çay = erkek_hiç + 20;  
@@ -73,10 +69,7 @@ int main() {
                                         for(int b = a + 1; b < 7; b++) {  
                                             if(kadın_sayılar[a] == kadın_sayılar[b]) {  
                                                 kadın_farklı = 0;  
-                                                break;  
-                                            }  
-                                        }  
-                                    }  
+                                                break;}}}  
                                     if(!kadın_farklı) continue;  
 
                                     int erkek_sayılar[7] = {erkek_hiç, eç0, eç1, eç2, ek0, ek1, ek2};  
@@ -85,10 +78,7 @@ int main() {
                                         for(int b = a + 1; b < 7; b++) {  
                                             if(erkek_sayılar[a] == erkek_sayılar[b]) {  
                                                 erkek_farklı = 0;  
-                                                break;  
-                                            }  
-                                        }  
-                                    }  
+                                                break;}}}  
                                     if(!erkek_farklı) continue;  
 
                                     int toplam_sayılar[7] = {10, tç0, tç1, tç2, tk0, tk1, tk2};  
@@ -97,10 +87,7 @@ int main() {
                                         for(int b = a + 1; b < 7; b++) {  
                                             if(toplam_sayılar[a] == toplam_sayılar[b]) {  
                                                 toplam_farklı = 0;  
-                                                break;  
-                                            }  
-                                        }  
-                                    }  
+                                                break;}}}  
                                     if(!toplam_farklı) continue;
 
                                    
@@ -123,16 +110,7 @@ int main() {
                                            10, tç0, tç1, tç2, tk0, tk1, tk2, 100);  
                                     printf("Ş    0      0     %3d    %3d     0     %3d    %3d     %d\n",  
                                            tç1, 2*tç2, tk1, 2*tk2, toplam_şeker);  
-                                    printf("==================================================\n\n");  
-                                }  
-                            }  
-                        }  
-                    }  
-                }  
-            }  
-        }   
-    }  
+                                    printf("==================================================\n\n");}}}}}}}}  
 
     printf("Toplam durum sayısı: %d\n", toplam_durum);  
-    return 0;
-}
+    return 0;}
