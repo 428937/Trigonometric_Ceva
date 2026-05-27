@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.optimize import fsolve
 
-'''This code solves for an unknown angle in the trigonometric Ceva equation.
+'''This code solves for an unknown angle in the trigonometric Ceva theorem in triangles
 ''' 
 
 def equation(x, a1, a2, b1, b2, b3):
