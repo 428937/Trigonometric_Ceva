@@ -2,6 +2,8 @@ import numpy as np
 from scipy.optimize import fsolve
 
 '''This code solves for an unknown angle in the trigonometric Ceva theorem in triangles
+
+For solving sin(a₁)·sin(a₂)·sin(x)=sin(b₁)·sin(b₂)·sin(b₃ - x) please enter values in order of a₁, a₂, b₁, b₂, b₃
 ''' 
 
 def equation(x, a1, a2, b1, b2, b3):
