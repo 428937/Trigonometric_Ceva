@@ -16,7 +16,7 @@ or equivalently
 sin(∠ABE) · sin(∠BCF) · sin(∠CAD) = sin(∠CBE) · sin(∠ACF) · sin(∠BAD)
 ```
 
-### About
+## About
 
 **"Trigonometric_Ceva"** is a Python implementation that solves for the unknown angle in the trigonometric form of Ceva's Theorem. It helps determine the angle required for the concurrency of three cevians in a triangle using numerical methods.
 
